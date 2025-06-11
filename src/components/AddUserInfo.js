@@ -1,58 +1,56 @@
 import { render } from "@testing-library/react";
-import React from "react";
+import React, { useState } from "react";
 
-class AddUserInfo extends React.Component {
-     // state obj 
-    state = {
+const AddUserInfo = (props) => {
+
+    const [dumpObj, setDumpObj] = useState({
         name: "trungdau",
         age: 18,
         address: "Danang",
-    };
+    });
 
-    handleChange = (event) => {
-        // console.log(event.target.value);
+    const handleChange = (event) => {
         const {name, value} = event.target;
-        this.setState({
-            [name]: value   // name = name, age = age
+        setDumpObj({
+            ...dumpObj, // giữ nguyên các giá trị cũ
+            [name] : value, // cập nhật giá trị mới cho name ,  age , address
         });
     }
 
-    handleOnSubmit = (event) => {
+    const handleOnSubmit = (event) => {
         event.preventDefault(); // block reload trang
-        this.props.handleAddNewUser(
+        props.handleAddNewUser(
             {
                 id: Math.floor(Math.random() * 1000) + 1 + "_RandomId", // random id
-                name: this.state.name,
-                age: this.state.age,
-                address: this.state.address,
+                name: dumpObj.name ,
+                age: dumpObj.age + 500,
+                address: dumpObj.address,
             }
         );
     }
-    render () {
-        return (
-            <div>
-             <form onSubmit={(event) => {
+    return(
+        <div>
+              <form onSubmit={(event) => {
                     // su kien submit cua form se reload lai trang, ham nay block dieu do
                     event.preventDefault(); 
-                    this.handleOnSubmit(event);
+                    handleOnSubmit(event);
                 }}>
                     <input type="text" 
                         name = "name"
-                        value={this.state.name}
-                        onChange={(event) => this.handleChange(event)}
+                        value={dumpObj.name}
+                        onChange={(event) => handleChange(event)}
                         // placeholder="Your name"
                     />
                     <input type="text" 
                         name = "age"
-                        value={this.state.age}
-                        onChange={(event) => this.handleChange(event)}
+                        value={dumpObj.age}
+                        onChange={(event) => handleChange(event)}
                         // placeholder="Your age"
                     />
                     <button type="submit" >Submit</button>
                 </form>
             </div>
-        );
-    }
+    );
 }
 
 export default AddUserInfo;
